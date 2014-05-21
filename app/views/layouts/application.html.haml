@@ -1,15 +1,15 @@
 !!!
 %html
   %head
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
-    %title= content_for?(:title) ? yield(:title) : 'Lctt Platform'
-    %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'Lctt Platform'}"}
+    %meta{name: 'viewport',    content: 'width=device-width, initial-scale=1.0'}
+    %title= "#{content_for?(:title) && yield(:title) + ' - ' || ''}#{project_name}"
+    %meta{name: 'description', content: "#{content_for?(:description) ? yield(:description) : project_name}"}
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
     %header
       = render 'layouts/navigation'
-    %main{:role => "main"}
+    %main.container{role: 'main'}
       = render 'layouts/messages'
       = yield

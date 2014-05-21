@@ -1,0 +1,25 @@
+/ site module
+%ul.nav.navbar-nav
+  %li= link_to '动态', '#TODO:everyone'
+  %li= link_to '添加', '#TODO:topicselector'
+  %li= link_to '推荐', '#TODO:translator&!topicselector&!admin'
+  %li= link_to '翻译', '#TODO:translator'
+  %li= link_to '校对', '#TODO:proofreader'
+  %li= link_to '发布', '#TODO:publisher'
+  %li= link_to '管理', '#TODO:admin'
+
+/ user management
+%ul.nav.navbar-nav.navbar-right
+  - if user_signed_in?
+    - avatar_tag = image_tag "https://avatars.githubusercontent.com/u/#{current_user.uid}?s=30", class: 'nav-avatar'
+
+    %li= link_to avatar_tag, current_user, style: 'padding: 10px;'
+    %li= link_to "#{current_user.name}", current_user
+
+    %li= link_to icon('sign-out') + '登出', signout_path
+  - else
+    - avatar_tag = image_tag 'not-login.png', class: 'nav-avatar'
+
+    %li= link_to avatar_tag, signin_path, style: 'padding: 10px;'
+    %li= link_to '未登录', current_user
+    %li= link_to icon('sign-in') + '登陆', signin_path

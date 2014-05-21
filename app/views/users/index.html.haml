@@ -4,7 +4,6 @@
     %thead
       %tr
         %th Username
-        %th Email
         %th Registered
         %th Role
         %th
@@ -13,7 +12,6 @@
       - @users.each do |user|
         %tr
           %td= link_to user.name, user
-          %td= user.email
           %td= user.created_at.to_date
           %td= user.roles.first.name.titleize unless user.roles.first.nil?
           %td
