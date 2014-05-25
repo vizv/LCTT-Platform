@@ -1,11 +1,11 @@
 / site module
 %ul.nav.navbar-nav
-  %li= link_to '动态', '#TODO:everyone'
-  %li= link_to '添加', '#TODO:topicselector'
-  %li= link_to '推荐', '#TODO:translator&!topicselector&!admin'
-  %li= link_to '翻译', '#TODO:translator'
-  %li= link_to '校对', '#TODO:proofreader'
-  %li= link_to '发布', '#TODO:publisher'
+  %li= link_to '动态', '#TODO:activity:logged_in?'
+  %li= link_to '添加', '#TODO:new:topicselector'
+  %li= link_to '推荐', '#TODO:suggest:(logged_in?)&(!topicselector)&(!admin)'
+  %li= link_to '翻译', '#TODO:translate:translate_:translator'
+  %li= link_to '校对', '#TODO:proofread:proofreader'
+  %li= link_to '发布', '#TODO:publicsh:publisher'
   %li= link_to '管理', '#TODO:admin'
 
 / user management
