@@ -12,15 +12,15 @@ class SessionsController < ApplicationController
     reset_session
     session[:user_id] = user.id
     user.add_role :admin if User.count == 1 # make the first user an admin
-    redirect_to root_url, :notice => 'Signed in!'
+    redirect_to root_url, :notice => '成功登陆!'
   end
 
   def destroy
     reset_session
-    redirect_to root_url, :notice => 'Signed out!'
+    redirect_to root_url, :notice => '成功登出!'
   end
 
   def failure
-    redirect_to root_url, :alert => "Authentication error: #{params[:message].humanize}"
+    redirect_to root_url, :alert => "与 Github 通讯时发生错误： #{params[:message].humanize}"
   end
 end
