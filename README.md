@@ -54,9 +54,9 @@ LCTT 已经拥有近百余名活跃成员，并欢迎更多的 Linux 志愿者�
 * `译文`[`已校对`]:
   - [15] **发布** 生成文章并发布: `译文`[`已校对`] => {归档}
 
-[!流程图](doc/LCTT_FlowChart.svg)
-
 * 已发布（结束）
+
+![流程图](https://cdn.rawgit.com/vizv/LCTT-Platform/develop/doc/LCTT_FlowChart.svg)
 
 
 ## 加入我们
