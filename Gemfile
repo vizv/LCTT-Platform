@@ -40,3 +40,4 @@ gem 'rolify'
 gem 'simple_form'
 gem 'therubyracer', :platform=>:ruby
 gem 'font-awesome-sass'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
