@@ -16,7 +16,8 @@ class User
       user.provider = auth['provider']
       user.uid = auth['uid']
       if auth['info']
-        user.name = auth['info']['name'] || ""
+        user.name = auth['info']['name']
+        user.name = auth['info']['nickname'] if (user.name == nil) or user.name.empty?
       end
     end
   end
