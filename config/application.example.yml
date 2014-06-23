@@ -10,5 +10,4 @@
 #
 OMNIAUTH_PROVIDER_KEY: Your_Provider_Key
 OMNIAUTH_PROVIDER_SECRET: Your_Provider_Secret
-ROLES: [admin, user, VIP]
-
+ROLES: [admin, translator, proofreader, topicselector, publisher]
