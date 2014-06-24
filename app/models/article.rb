@@ -9,11 +9,11 @@ class Article
   belongs_to :suggestion # 推荐源
   belongs_to :category   # 文章分类（默认无分类）
 
-  has_one :original, type: Content # 原文（英文，MarkDown 格式）
-  has_one :publish,  type: Content # 终稿（中文，HTML 格式）
+  has_one :original, class_name: 'Contact' # 原文（英文，MarkDown 格式）
+  has_one :publish,  class_name: 'Contact' # 终稿（中文，HTML 格式）
 
-  has_many :translations, type: Content # 译文（中文，MarkDown 格式）
-  has_many :reversions,   type: Content # 校对稿（中文，MarkDown 格式）
+  has_many :translations, class_name: 'Contact' # 译文（中文，MarkDown 格式）
+  has_many :reversions,   class_name: 'Contact' # 校对稿（中文，MarkDown 格式）
 
   validates_presence_of :title
   validates_presence_of :category
