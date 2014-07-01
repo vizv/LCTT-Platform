@@ -2,31 +2,55 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new # guest user (not logged in)
-    if user.has_role? :admin
-      can :manage, :all
+    return unless user
+    @user_id = user._id
+
+    Role.roles.keys.each do |role|
+      send("#{role}_rules") if user.has_role? role.to_sym
     end
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user permission to do.
-    # If you pass :manage it will apply to every action. Other common actions here are
-    # :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on. If you pass
-    # :all it will apply to every resource. Otherwise pass a Ruby class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  private
+
+  def member_base
+    # 成员可以推荐文章到翻译平台
+    can :suggest, Article
+  end
+
+  ###
+
+  def translator_rules
+    # 译者是成员
+    member_base
+    # 只能翻译认领后并处于'翻译中'状态的文章
+    can :translate, Article, user_id: @user_id, state: :translating
+  end
+
+  def proofreader_rules
+    # 校对是成员
+    member_base
+    # 可以校对任何翻译完成的文章
+    can :proofread, Article, state: :translated
+  end
+
+  def publisher_rules
+    # 发布是成员
+    member_base
+    # 可以发布任何校对完成的文章
+    can :publish, Article, state: :proofread
+  end
+
+  def topicselector_rules
+    # 选题可以创建文章
+    can :new, Article
+    # 但不可以推荐
+    cannot :suggest, Article
+  end
+
+  def admin_rules
+    # 管理可以干任何事情
+    can :manage, :all
+    # 但不可以推荐
+    cannot :suggest, Article
   end
 end

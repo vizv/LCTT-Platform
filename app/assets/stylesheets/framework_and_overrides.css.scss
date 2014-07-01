@@ -2,11 +2,18 @@
 @import "bootstrap";
 @import "bootstrap/theme";
 
+// navbar fix
 main {
   padding-top: 60px;
 }
 
+// navbar avatar resize
 .nav-avatar {
   width: 30px;
   height: 30px;
+}
+
+// allow textarea resize vertically-only
+textarea {
+  resize: vertical;
 }

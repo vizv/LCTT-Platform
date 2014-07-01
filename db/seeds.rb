@@ -1,14 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-# Environment variables (ENV['...']) can be set in the file config/application.yml.
-# See http://railsapps.github.io/rails-environment-variables.html
-puts 'ROLES'
-YAML.load(ENV['ROLES']).each do |role|
-  Role.mongo_session['roles'].insert({ :name => role })
-  puts 'role: ' << role
+puts 'Seeding Categories...'
+CATEGORIES = {
+  'news' => '新闻',
+  'talk' => '评论',
+  'tech' => {
+    _: '科技',
+    'desktop' => '桌面应用',
+    'sa'      => '系统运维',
+    'program' => '软件开发',
+  },
+}
+
+def create_category hash, super_category = nil
+  hash.each do |name, description|
+    next if name.is_a? Symbol
+    hash = nil
+
+    if description.is_a? Hash
+      hash = description
+      description = hash[:_]
+    end
+
+    c = Category.create! name: name, description: description, super_category: super_category
+    puts "category: #{name} - #{description}"
+
+    create_category hash, c if hash
+  end
 end
+create_category CATEGORIES

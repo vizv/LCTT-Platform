@@ -5,9 +5,9 @@ class SessionsController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"]
-    pp auth
-    user = User.where(:provider => auth['provider'],
-        :uid => auth['uid'].to_s).first || User.create_with_omniauth(auth)
+
+    user = User.where(:provider => auth['provider'], :uid => auth['uid'].to_s).first
+    user ||= User.create! uid: auth['uid'], name: auth['info']['nickname']
 
     reset_session
     session[:user_id] = user.id

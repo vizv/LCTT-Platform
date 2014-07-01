@@ -6,5 +6,17 @@ LcttPlatform::Application.routes.draw do
   match '/signout' => 'sessions#destroy', :as => :signout
   match '/auth/failure' => 'sessions#failure'
 
-  resources :articles, :only => [:new, :create]
+  resources :activity, :only => [:index, :show]
+
+  resources :articles, :only => [:new, :create, :update, :destroy, :show] do
+    get :suggest, to: 'articles#suggest', on: :collection
+    get :translate, to: 'articles#translate_index', on: :collection
+    get :proofread, to: 'articles#proofread_index', on: :collection
+    get :publish, to: 'articles#publish_index', on: :collection
+    get :translate, on: :member
+    get :proofread, on: :member
+    get :publish, on: :member
+  end
+
+  get '/management' => 'management#index'
 end

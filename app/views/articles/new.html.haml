@@ -1,7 +1,11 @@
 .row
   .col-md-12
     = simple_form_for @article do |f|
-      = f.input :title,      label: '原文标题'
-      = f.input :source,     label: '文章来源'
+      = f.input :title, label: '原文标题（英文）'
+      = f.input :source, label: '文章来源'
       = f.input :source_url, label: '来源 URL'
-      = f.input :license,    label: '许可信息'
+      = f.input :license, label: '许可信息'
+      = f.input :category, collection: Category.all.group_by(&:ancestor), group_method: :last, as: :grouped_select, label_method: :to_s, value_method: :name, label: '文章分类'
+      = f.input :original, as: :text, label: '原文'
+
+      = f.button :submit, '创建原文', class: 'btn-default'
