@@ -13,10 +13,10 @@ class Role
 
   def self.roles
     {
-      'topicselector' => '选题',
       'translator'    => '译者',
       'proofreader'   => '校对',
       'publisher'     => '发布',
+      'topicselector' => '选题',
       'admin'         => '管理',
     }
   end
