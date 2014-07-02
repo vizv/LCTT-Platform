@@ -1,6 +1,17 @@
+- formatter = Rouge::Formatters::HTML.new
+- lexer = Rouge::Lexers::Markdown.new css_class: 'highlight'
+
 .page-header
   %h1
     文章翻译进度
     %small= @article.title
 
 = @article.inspect
+
+.panel.panel-default
+  .panel-heading
+    .panel-title 原文
+  .panel-body
+    = GitHub::Markdown.render(@article.original).html_safe
+  .panel-footer
+    = preserve formatter.format(lexer.lex(@article.original)).html_safe

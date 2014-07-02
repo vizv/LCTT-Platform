@@ -24,17 +24,20 @@ class ApplicationController < ActionController::Base
   def correct_user?
     @user = User.find(params[:id])
     unless current_user == @user
-      redirect_to root_url, :alert => "Access denied."
+      flash[:danger] = '访问被拒绝。'
+      redirect_to root_url
     end
   end
 
   def authenticate_user!
     if !current_user
-      redirect_to root_url, :alert => 'You need to sign in for access to this page.'
+      flash[:danger] = '你需要登陆后才能访问该页面。'
+      redirect_to root_url
     end
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :alert => exception.message
+    flash[:danger] = '访问被拒绝。'
+    redirect_to root_path
   end
 end

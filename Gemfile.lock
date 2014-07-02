@@ -67,6 +67,7 @@ GEM
       rails (>= 3, < 5)
     font-awesome-sass (4.1.0)
       sass (~> 3.2)
+    github-markdown (0.6.5)
     haml (4.1.0.beta.1)
       tilt
     haml-rails (0.4)
@@ -172,6 +173,7 @@ GEM
       json (~> 1.4)
     ref (1.0.5)
     rolify (3.4.0)
+    rouge (1.4.0)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -236,6 +238,7 @@ DEPENDENCIES
   factory_girl_rails
   figaro
   font-awesome-sass
+  github-markdown
   haml-rails
   html2haml
   jquery-rails
@@ -249,6 +252,7 @@ DEPENDENCIES
   rails (= 3.2.18)
   rails_layout
   rolify
+  rouge
   rspec-rails
   sass-rails (~> 3.2.3)
   simple_form

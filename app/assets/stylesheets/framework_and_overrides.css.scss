@@ -1,6 +1,6 @@
 // import the CSS framework
 @import "bootstrap";
-@import "bootstrap/theme";
+// @import "bootstrap/theme";
 
 // navbar fix
 main {
@@ -16,4 +16,11 @@ main {
 // allow textarea resize vertically-only
 textarea {
   resize: vertical;
+}
+
+// fix dismiss position
+.alert-dismissible .close {
+    position: relative;
+    top: -2px;
+    color: inherit;
 }

@@ -41,7 +41,7 @@ class ArticlesController < ApplicationController
     @article = Article.where(id: params[:id]).first
 
     unless @article
-      flash[:error] = '文章不存在！'
+      flash[:danger] = '文章不存在！'
     end
     respond_with @article
   end
