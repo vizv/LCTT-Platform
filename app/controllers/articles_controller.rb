@@ -1,12 +1,15 @@
 class ArticlesController < ApplicationController
-  load_and_authorize_resource
   respond_to :html, :json
 
   def suggest
+    authorize! :suggest, Article
+
     # TODO: stub
   end
 
   def new
+    authorize! :new, @article
+
     @article = Article.new
     respond_with @article
   end
@@ -38,11 +41,13 @@ class ArticlesController < ApplicationController
   ###
 
   def show
-    @article = Article.where(id: params[:id]).first
-
-    unless @article
+    unless @article = Article.where(id: params[:id]).first
       flash[:danger] = '文章不存在！'
+      return redirect_to root_path
     end
+
+    authorize! :show, @article
+
     respond_with @article
   end
 

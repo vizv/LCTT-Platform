@@ -10,11 +10,7 @@ class ApplicationController < ActionController::Base
   private
   
   def current_user
-    begin
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    rescue Exception => e
-      nil
-    end
+    @current_user ||= User.where(id: session[:user_id]).first if session[:user_id]
   end
 
   def user_signed_in?
@@ -22,9 +18,9 @@ class ApplicationController < ActionController::Base
   end
 
   def correct_user?
-    @user = User.find(params[:id])
+    @user = User.where(id: params[:id]).first
     unless current_user == @user
-      flash[:danger] = '访问被拒绝。'
+      flash[:danger] = '访问被拒绝：不匹配的用户，请尝试重新登陆。'
       redirect_to root_url
     end
   end
@@ -37,7 +33,11 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    flash[:danger] = '访问被拒绝。'
+    if user_signed_in?
+      flash[:danger] = '访问被拒绝：没有足够的权限。'
+    else
+      flash[:danger] = '访问被拒绝：请先登陆。'
+    end
     redirect_to root_path
   end
 end
