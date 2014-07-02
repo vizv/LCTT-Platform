@@ -6,6 +6,7 @@
       = f.input :source_url, label: '来源 URL'
       = f.input :license, label: '许可信息'
       = f.input :category, collection: Category.all.group_by(&:ancestor), group_method: :last, as: :grouped_select, label_method: :to_s, value_method: :name, label: '文章分类'
-      = f.input :original, as: :text, label: '原文'
+      = f.input :original, as: :text, label: '原文内容'
+      = f.hidden_field :state, value: 'new' # 标记为新原文
 
-      = f.button :submit, '创建原文', class: 'btn-default'
+      = f.button :submit, '提交选题', class: 'btn-default'

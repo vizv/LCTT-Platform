@@ -4,7 +4,8 @@ class ArticlesController < ApplicationController
   def suggest
     authorize! :suggest, Article
 
-    # TODO: stub
+    @article = Article.new
+    respond_with @article
   end
 
   def new
@@ -42,7 +43,7 @@ class ArticlesController < ApplicationController
 
   def show
     unless @article = Article.where(id: params[:id]).first
-      flash[:danger] = '文章不存在！'
+      flash[:danger] = '该文章不存在！'
       return redirect_to root_path
     end
 
@@ -54,9 +55,12 @@ class ArticlesController < ApplicationController
   ###
 
   def create
+    state_action = params[:article] && params[:article][:state]
+    authorize! state_action.to_sym, Article if ['suggest', 'new'].include? state_action
+
     @article = Article.new(params[:article])
     if @article.save
-      flash[:success] = '新文章已创建。'
+      flash[:success] = "新#{state_action == 'suggest' && '推荐' || '原文'}已创建。"
     end
     respond_with @article
   end

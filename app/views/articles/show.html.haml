@@ -8,10 +8,19 @@
 
 = @article.inspect
 
-.panel.panel-default
-  .panel-heading
-    .panel-title 原文
-  .panel-body
-    = GitHub::Markdown.render(@article.original).html_safe
-  .panel-footer
-    = preserve formatter.format(lexer.lex(@article.original)).html_safe
+- if @article.original
+  .panel.panel-default
+    .panel-heading
+      .panel-title 原文
+    .panel-body
+      = GitHub::Markdown.render(@article.original).html_safe
+    .panel-footer
+      = preserve formatter.format(lexer.lex(@article.original)).html_safe
+- elsif @article.suggestion
+  .panel.panel-default
+    .panel-heading
+      .panel-title 推荐
+    .panel-body
+      = GitHub::Markdown.render(@article.suggestion).html_safe
+    .panel-footer
+      = preserve formatter.format(lexer.lex(@article.suggestion)).html_safe

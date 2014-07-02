@@ -21,7 +21,7 @@ class Role
     }
   end
 
-  def to_s name
+  def to_s
     self.class.roles[name]
   end
 end

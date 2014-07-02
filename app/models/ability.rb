@@ -49,7 +49,6 @@ class Ability
     member_base
     # 选题可以创建文章
     can :new, Article
-    can :create, Article
     # 但不可以推荐
     cannot :suggest, Article
   end
