@@ -42,3 +42,6 @@ gem 'therubyracer', :platform=>:ruby
 gem 'font-awesome-sass'
 gem 'github-markdown'
 gem 'rouge'
+
+# sass fix
+gem 'sass', '3.2.13'

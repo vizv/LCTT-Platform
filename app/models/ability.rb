@@ -26,6 +26,8 @@ class Ability
     member_base
     # 只能翻译认领后并处于'翻译中'状态的文章
     can :translate, Article, user_id: @user_id, state: :translating
+    # 也只能取消翻译认领后并处于'翻译中'状态的文章
+    can :translate, Article, user_id: @user_id, state: :translating
   end
 
   def proofreader_rules

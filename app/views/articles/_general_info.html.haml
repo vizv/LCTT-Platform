@@ -1,0 +1,24 @@
+%dt 文章来源
+%dd= @article.source
+
+%dt 文章来源 URL
+%dd= @article.source_url
+
+%dt 分类
+%dd= @article.category
+
+%dt 当前状态
+%dd= @article.state_label
+
+%dt 创建时间
+%dd= format @article.created_at
+
+%dt 最近修改
+%dd
+  - if @article.is_new? or @article.is_suggest?
+    从未
+  - else
+    = format @article.updated_at
+
+%dt 许可信息
+%dd= @article.license

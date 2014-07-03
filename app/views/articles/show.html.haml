@@ -1,12 +1,24 @@
-- formatter = Rouge::Formatters::HTML.new
-- lexer = Rouge::Lexers::Markdown.new css_class: 'highlight'
-
 .page-header
   %h3
     文章翻译进度
     %small= @article.title
 
-= @article.inspect
+.panel.panel-default
+  .panel-heading
+    .panel-title 相关信息
+  .panel-body
+    %dl.dl-horizontal
+      = render 'general_info'
+
+      - # 参与者信息
+      / - versions = @article.versions
+      / - versions.push @article
+
+      / - contributors = versions.grouped_by &state
+
+      - if val = @article.new_owner
+        %dt 选题
+        %dd= val
 
 - if @article.original
   .panel.panel-default
@@ -24,3 +36,5 @@
       = GitHub::Markdown.render(@article.suggestion).html_safe
     .panel-footer
       = preserve formatter.format(lexer.lex(@article.suggestion)).html_safe
+
+= link_to '认领', translate_article_path(@article), class: "btn btn-success #{'disabled' unless @article.is_new?}" if can? :translate, Article

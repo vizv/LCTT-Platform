@@ -192,7 +192,7 @@ GEM
       rspec-mocks (~> 2.14.0)
     ruby_parser (3.1.3)
       sexp_processor (~> 4.1)
-    sass (3.3.7)
+    sass (3.2.13)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -254,6 +254,7 @@ DEPENDENCIES
   rolify
   rouge
   rspec-rails
+  sass (= 3.2.13)
   sass-rails (~> 3.2.3)
   simple_form
   therubyracer

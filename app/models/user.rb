@@ -12,4 +12,12 @@ class User
   attr_accessible :role_ids, :as => :admin
   attr_accessible :uid, :name
   validates_presence_of :name
+
+  def current_translating
+     Article.where(user: self, state: :translating).first
+  end
+
+  def to_s
+    name
+  end
 end

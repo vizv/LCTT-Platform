@@ -17,13 +17,54 @@ class Article
   belongs_to :category # 文章分类（默认无分类）
   belongs_to :user     # 所属用户
 
-  validates_presence_of :title
+  validates_presence_of :title, message: '原文标题不能为空'
+
+  def self.by_id id
+    Article.where(id: id).first
+  end
+
+  # 操作
+
+  def begin_translate user
+    return if self[:state] != :new
+    self.user = user
+    self.state = :translating
+    self.save!
+  end
+
+  def cancel_translate
+    return if self[:state] != :translating
+    self.user = new_owner
+    self.state = :new
+    self.save!
+  end
+
+  # 测试
 
   def archived?
     !!deleted_at
   end
 
-  def state
+  def is_suggest?
+    self[:state] == :suggest
+  end
+
+  def is_new?
+    self[:state] == :new
+  end
+
+  # 取值
+
+  def all_versions
+    a = self.versions
+    a.push self.dup
+  end
+
+  def new_owner
+    self.all_versions.group_by(&:state)[:new].first.user
+  end
+
+  def state_label
     case self[:state]
     when :suggest     then '新推荐'
     when :new         then '新原文'

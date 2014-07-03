@@ -1,1 +1,37 @@
-TODO
+.page-header
+  %h3 认领原文
+
+= render 'layouts/screen_warning'
+
+%table.table.table-striped.table-hover.table-bordered
+  %thead
+    %tr
+      %th 标题
+      %th 分类
+      %th 当前状态
+      %th.hidden-xs 创建时间
+      %th.hidden-xs 最近修改
+      %th 长度
+      %th
+
+  %tbody
+    - @articles.each do |article|
+      - # 标记颜色
+      - color_class = case article.state
+      - when :translating then 'warning'
+      - when :translated then 'success'
+      - else nil
+
+      %tr{class: color_class}
+        %td= article.title
+        %td= article.category || '未分类'
+        %td= article.state_label
+        %td.hidden-xs= format article.created_at
+        %td.hidden-xs
+          - if article.is_new?
+            %strong 从未
+          - else
+            = format article.updated_at
+        %td= article.original.length # FIXME: 添加 before_save 钩子用以缓存
+        %td
+          = link_to '查看', article_path(article), class: "btn btn-xs btn-block btn-default #{'disabled' unless article.is_new?}"

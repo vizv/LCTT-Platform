@@ -4,7 +4,8 @@
 
 // navbar fix
 main {
-  padding-top: 60px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 // navbar avatar resize
@@ -23,4 +24,75 @@ textarea {
     position: relative;
     top: -2px;
     color: inherit;
+}
+
+// set minimal label width
+.input-group > .input-group-addon:first-child {
+    min-width: 100px;
+}
+
+// too-small overlay
+.too-small-show {
+  display: none;
+  z-index: 10000;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  background-color: #EEE;
+
+  .vcenter {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 0;
+
+    overflow: visible;
+
+    div {
+      position: absolute;
+      left: 0;
+      top: -10px;
+      height: 20px;
+      width: 100%;
+
+      line-height: 0;
+      text-align: center;
+    }
+  }
+}
+@media screen and (max-device-width: 479px){
+  .too-small-show {
+    display: block;
+  }
+}
+
+// page footer
+footer {
+  border-top: 1px solid #E5E5E5;
+  text-align: center;
+  padding: 20px 0;
+  height: 100px;
+  color: #363636;
+  font-size: 120%;
+
+  small {
+    color: #888888;
+    font-size: 80%;
+  }
+}
+
+// remove panel body extra margin
+.panel-body > :last-child {
+  margin-bottom: 0;
+}
+
+// extra space for flash message
+.flash-msg {
+  margin-top: 20px;
 }
