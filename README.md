@@ -62,7 +62,7 @@ LCTT 已经拥有近百余名活跃成员，并欢迎更多的 Linux 志愿者�
 1. **管理** 可以在任何阶段对任意文章进行 `归档文章` 和 `恢复文章` 操作。
 2. 版本控制要求任何文章的操作都应该被记录，所以文章创建后无法删除。
 
-![流程图](https://cdn.rawgit.com/vizv/LCTT-Platform/develop/doc/LCTT_FlowChart.svg)
+![流程图](https://rawgit.com/vizv/LCTT-Platform/develop/doc/LCTT_FlowChart.svg)
 
 
 ### 成员身份和权限
