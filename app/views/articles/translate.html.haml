@@ -17,3 +17,12 @@
     = GitHub::Markdown.render(@article.original).html_safe
   .panel-footer
     = preserve formatter.format(lexer.lex(@article.original)).html_safe
+
+.row
+  .col-md-12
+    = simple_form_for @article do |f|
+      = f.input :translation, as: :text, label: '译文'
+      = f.hidden_field :state, value: 'translated' # 标记为已翻译
+
+= link_to '提交翻译', article_path(@article), method: :put, class: "btn btn-success"
+= link_to '放弃翻译', translate_article_path(@article), method: :delete, class: "btn btn-danger", data: { confirm: '真的要放弃么？' }

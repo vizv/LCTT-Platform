@@ -1,19 +1,21 @@
 class ArticlesController < ApplicationController
   respond_to :html
 
+  ### 新建推荐操作
   def suggest
     authorize! :suggest, Article
     @article = Article.new
     respond_with @article
   end
 
+  ### 新建原文操作
   def new
     authorize! :new, @article
     @article = Article.new
     respond_with @article
   end
 
-  ### 翻译页面
+  ### 翻译管理页面
   def translate
     authorize! :translate, Article
     return not_exist unless @article = Article.by_id(params[:id])
@@ -27,6 +29,24 @@ class ArticlesController < ApplicationController
     respond_with @article
   end
 
+  ### 提交翻译操作
+  def finish_translate
+    authorize! :finish_translate, Article
+
+    # 如果(没有 指定 文章ID)那么(自动获取)
+    if params[:id]
+      return not_exist unless article = Article.by_id(params[:id])
+    else
+      return not_exist unless article = current_user.current_translating
+    end
+
+    authorize! :finish_translate, article
+
+    # (提交翻译)并(重定向至 翻译进度页面)
+    article.finish_translate
+    redirect_to article_path(article)
+  end
+
   ### 取消翻译操作
   def cancel_translate
     authorize! :cancel_translate, Article
@@ -38,9 +58,9 @@ class ArticlesController < ApplicationController
       return not_exist unless article = current_user.current_translating
     end
 
-    authorize! :translate, article
+    authorize! :cancel_translate, article
 
-    # (取消翻译)并(返回 翻译认领页面)
+    # (取消翻译)并(重定向至 翻译认领页面)
     article.cancel_translate
     redirect_to translate_articles_path 
   end
@@ -49,7 +69,7 @@ class ArticlesController < ApplicationController
   def translate_index
     authorize! :translate, Article
 
-    # 如果(当前译者 正在翻译)那么(重定向至 翻译页面)
+    # 如果(当前译者 正在翻译)那么(重定向至 翻译管理页面)
     if article = current_user.current_translating
       return redirect_to translate_article_path(article)
     end
@@ -76,8 +96,7 @@ class ArticlesController < ApplicationController
     # TODO: stub
   end
 
-  ###
-
+  ### 翻译进度页面
   def show
     authorize! :show, Article
     return not_exist unless @article = Article.by_id(params[:id])

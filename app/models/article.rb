@@ -26,14 +26,14 @@ class Article
   # 操作
 
   def begin_translate user
-    return if self[:state] != :new
+    return if self.state != :new
     self.user = user
     self.state = :translating
     self.save!
   end
 
   def cancel_translate
-    return if self[:state] != :translating
+    return if self.state != :translating
     self.user = new_owner
     self.state = :new
     self.save!
@@ -46,11 +46,15 @@ class Article
   end
 
   def is_suggest?
-    self[:state] == :suggest
+    self.state == :suggest
   end
 
   def is_new?
-    self[:state] == :new
+    self.state == :new
+  end
+
+  def is_translating?
+    self.state == :translating
   end
 
   # 取值
@@ -65,13 +69,12 @@ class Article
   end
 
   def state_label
-    case self[:state]
+    case self.state
     when :suggest     then '新推荐'
     when :new         then '新原文'
     when :translating then '翻译中'
     when :translted   then '已翻译'
     when :proofread   then '已校对'
-    when :published   then '已发布'
     end
   end
 
