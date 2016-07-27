@@ -1,38 +1,55 @@
 LcttPlatform::Application.routes.draw do
   root :to => "home#index"
-  resources :users, :only => [:index, :show, :edit, :update ]
-  match '/auth/:provider/callback' => 'sessions#create'
-  match '/signin' => 'sessions#new', :as => :signin
-  match '/signout' => 'sessions#destroy', :as => :signout
-  match '/auth/failure' => 'sessions#failure'
 
-  resources :articles, :only => [:index, :show] do
-    ### 创建文章
-    get    :new,       to: 'articles#new',            on: :collection # 新建文章页面
-    post   :suggest,   to: 'articles#suggest',        on: :collection # 新建推荐操作 [未创建->新推荐] new
-    post   :create,    to: 'articles#create',         on: :collection # 新建原文操作 [未创建->新原文] new
-    post   :approve,   to: 'articles#approve',        on: :member     # 批准推荐操作 [新推荐->新原文] show
 
-    ### 翻译文章
-    post   :claim,     to: 'articles#claim',          on: :member     # 认领原文操作 [新原文->翻译中] show
-    get    :translate, to: 'articles#translate',      on: :member     # 翻译管理页面
-    post   :submit,    to: 'articles#submit',         on: :member     # 提交翻译操作 [翻译中->已翻译] translate
-    post   :cancel,    to: 'articles#cancel',         on: :member     # 放弃翻译操作 [翻译中->新原文] translate
+  #### 帐号 ####
 
-    get :proofread, to: 'articles#proofread_index', on: :collection
-    get :publish, to: 'articles#publish_index', on: :collection
-    get :translate, on: :member
-    get :proofread, on: :member
-    get :publish, on: :member
+  # 帐号管理
+  resources :users, :only => [:index, :show, :edit, :update]
 
-    ### 管理文章
-    post   :delete,    to: 'articles#destroy',        on: :member     # 归档文章操作 [+归档]
-    post   :restore,   to: 'articles#destroy',        on: :member     # 恢复文章操作 [-归档]
+  # GitHub OAuth
+  get '/auth/:provider/callback', to: 'sessions#create',  as: :auth_callback
+  get '/signin',                  to: 'sessions#new',     as: :signin
+  get '/signout',                 to: 'sessions#destroy', as: :signout
+  get '/auth/failure',            to: 'sessions#failure', as: :auth_failure
 
-    ### 内置操作
-    # get    :index,   to: 'articles#index',          on: :collection # 文章列表页面
-    # get    :how,     to: 'articles#how',            on: :member
-  end
 
-  get '/management' => 'management#index'
+  #### 页面 ####
+  # 项目动态
+  get '/activity',          to: 'activity#index',   as: :activity
+  # 文章列表
+  get '/articles',          to: 'articles#index',   as: :articles
+  # 新建推荐
+  get '/articles/suggest',  to: 'articles#suggest', as: :suggest_article
+  # 新建原文
+  get '/articles/new',      to: 'articles#new',     as: :new_article
+  # 编辑文章
+  get '/articles/:id/edit', to: 'articles#edit',    as: :edit_article
+  # 预览文章
+  get '/articles/:id',      to: 'articles#show',    as: :show_article
+
+
+  #### 操作 ####
+  # 新建文章
+  post '/articles/create',      to: 'articles#create',  as: :create_article
+  # 批准推荐
+  post '/articles/:id/approve', to: 'articles#approve', as: :approve_article
+  # 认领原文
+  post '/articles/:id/claim',   to: 'articles#claim',   as: :claim_article
+  # 提交翻译
+  post '/articles/:id/submit',  to: 'articles#submit',  as: :submit_article
+  # 放弃翻译
+  post '/articles/:id/cancel',  to: 'articles#cancel',  as: :cancel_article
+  # 完成校对
+  post '/articles/:id/accept',  to: 'articles#accept',  as: :accept_article
+  # 否决翻译
+  post '/articles/:id/deny',    to: 'articles#deny',    as: :deny_article
+  # 归档文章
+  post '/articles/:id/archive', to: 'articles#archive', as: :archive_article
+  # 恢复文章
+  post '/articles/:id/restore', to: 'articles#restore', as: :restore_article
+
+
+  #### 管理页面 ####
+  get '/management', to: 'management#index', as: :management
 end

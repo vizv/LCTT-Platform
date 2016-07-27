@@ -4,8 +4,8 @@ class User
   include Mongoid::Timestamps::Created
   rolify
 
-  field :uid,                                     type: String # GitHub UID
-  field :name,                                    type: String # 名字
+  field :uid,  type: String # GitHub UID
+  field :name, type: String # 名字, 用于显示在作者栏
 
   has_many :articles # 用户翻译的文章 FIXME: Override 默认方法，提供归档和版本检索
 
@@ -13,8 +13,12 @@ class User
   attr_accessible :uid, :name
   validates_presence_of :name
 
-  def current_translating
-     Article.where(user: self, state: :translating).first
+  def claimed_article
+    Article.where(user: self, state: :translating).first
+  end
+
+  def is_translating?
+    not claimed_article.nil?
   end
 
   def to_s

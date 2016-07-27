@@ -1,14 +1,16 @@
 class ArticlesController < ApplicationController
   respond_to :html
 
-  ### 新建推荐操作
+  #### 页面 ####
+
+  ### 新建推荐
   def suggest
     authorize! :suggest, Article
     @article = Article.new
     respond_with @article
   end
 
-  ### 新建原文操作
+  ### 新建原文
   def new
     authorize! :new, @article
     @article = Article.new
