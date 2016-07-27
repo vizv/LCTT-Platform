@@ -40,4 +40,9 @@ class ApplicationController < ActionController::Base
     end
     redirect_to root_path
   end
+
+  rescue_from Mongoid::Errors::DocumentNotFound do |exception|
+    # TODO: 自定义 404
+    render :file => 'public/404.html', :status => :not_found
+  end
 end

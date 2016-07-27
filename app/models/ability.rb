@@ -1,66 +1,64 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
-    return unless user
-    @user_id = user._id
+  def initialize user
+    return unless @user = user
 
+    # 应用默认成员规则
+    apply_member_rules
+
+    # 应用用户拥有的其他角色规则
     Role.roles.keys.each do |role|
-      send("#{role}_rules") if user.has_role? role.to_sym
+      send "apply_#{role}_rules" if @user.has_role? role
     end
+
+    apply_override_rules
   end
 
   private
 
-  def member_base
+  def apply_member_rules
+    # 成员可以查看项目动态
+    can :index, Activity
+    # 成员可以列出翻译平台中的文章
+    can :index, Article, deleted_at: nil
     # 成员可以推荐文章到翻译平台
-    can :suggest, Article
-    # 成员也可以查看任意文章的翻译进度
-    can :show, Article
+    can [:new, :create], Article, state: :suggest
+    # 成员也可以查看任意没有归档文章的翻译进度
+    can :show, Article, deleted_at: nil
   end
 
-  ###
-
-  def translator_rules
-    # 译者是成员
-    member_base
-    # 只能翻译认领后并处于'翻译中'状态的文章
-    can :translate, Article, user_id: @user_id, state: :translating
-    # 也只能取消翻译认领后并处于'翻译中'状态的文章
-    can :cancel_translate, Article, user_id: @user_id, state: :translating
-    # 同样也只能提交翻译认领后并处于'翻译中'状态的文章
-    can :finish_translate, Article, user_id: @user_id, state: :translating
+  def apply_translator_rules
+    can :claim, Article, state: :new, deleted_at: nil unless @user.claimed_article?
+    # 只能翻译、取消和提交认领后并处于'翻译中'状态的文章
+    can [:edit, :submit, :cancel], Article, user: @user, state: :translating
   end
 
-  def proofreader_rules
-    # 校对是成员
-    member_base
+  def apply_proofreader_rules
     # 可以校对任何翻译完成的文章
     can :proofread, Article, state: :translated
     can :update, Article, state: :translated
   end
 
-  def publisher_rules
-    # 发布是成员
-    member_base
+  def apply_publisher_rules
     # 可以发布任何校对完成的文章
     can :publish, Article, state: :proofread
     can :update, Article, state: :proofread
   end
 
-  def topicselector_rules
-    # 发布是成员
-    member_base
+  def apply_topicselector_rules
     # 选题可以创建文章
-    can :new, Article
-    # 但不可以推荐
-    cannot :suggest, Article
+    can [:new, :create], Article, state: :new
+    # 选题可以批准推荐
+    can :edit, Article, state: :suggest
   end
 
-  def admin_rules
+  def apply_admin_rules
     # 管理可以干任何事情
     can :manage, :all
-    # 但不可以推荐
-    cannot :suggest, Article
+  end
+
+  def apply_override_rules
+    cannot [:show, :edit], nil
   end
 end

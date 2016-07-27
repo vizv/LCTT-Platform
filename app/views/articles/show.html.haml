@@ -37,4 +37,4 @@
     .panel-footer
       = preserve formatter.format(lexer.lex(@article.suggestion)).html_safe
 
-= link_to '认领', translate_article_path(@article), class: "btn btn-success #{'disabled' unless @article.is_new?}" if can? :translate, Article
+= link_to '认领', article_path(@article, action: :claim), method: :put, class: "btn btn-success #{'disabled' unless @article.is_new?}" if can? :translate, Article

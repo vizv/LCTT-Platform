@@ -7,8 +7,6 @@ group :assets do
   gem 'uglifier',     '>= 1.0.3'
 end
 group :development do
-  gem 'better_errors'
-  gem 'binding_of_caller', :platforms=>[:mri_21]
   gem 'html2haml'
   gem 'quiet_assets'
   gem 'rails_layout'
@@ -17,6 +15,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'pry-rails'
   gem 'pry-rescue'
+  gem 'pry-byebug'
   gem 'rspec-rails'
 end
 group :production do

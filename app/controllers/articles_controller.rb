@@ -1,21 +1,79 @@
 class ArticlesController < ApplicationController
   respond_to :html
 
-  #### 页面 ####
+  def index
+    authorize! :index, Article
 
-  ### 新建推荐
-  def suggest
-    authorize! :suggest, Article
-    @article = Article.new
-    respond_with @article
+    @articles = Article.all
+
+    respond_with @articles
   end
 
-  ### 新建原文
   def new
-    authorize! :new, @article
-    @article = Article.new
+    @article = Article.new params[:article]
+
+    authorize! :new, @articles
+
     respond_with @article
   end
+
+  def create
+    @article = Article.new params[:article]
+
+    authorize! :create, @article
+
+    @article.user = current_user
+    if @article.save
+      flash[:success] = "#{@article.state_label}已创建。"
+    end
+
+    respond_with @article
+  end
+
+  def edit
+    @article = Article.find params[:id]
+
+    authorize! :edit, @article
+
+    respond_with @articles
+  end
+
+  def show
+    # 同时包括归档的文章
+    @article = Article.find params[:id] rescue Article.deleted.find params[:id]
+
+    authorize! :show, @article
+
+    respond_with @articles
+  end
+
+  def update
+    # 检查 action 然后调用
+    binding.pry
+    action = request.query_parameters[:action]
+    actions = %(approve, claim, submit, cancel, accept, deny, archive, restore)
+    render status: :not_found and return unless actions.include? action
+
+    @article = Article.find params[:id] rescue Article.deleted.find params[:id]
+    send action
+  end
+
+  private
+
+  def claim
+    authorize! :claim, @article
+
+    if @articles.claim current_user
+      flash[:success] = "#{@article} 领取成功。"
+    else
+      flash[:warning] = "#{@article} 被他人领取。"
+    end
+
+    respond_with @article
+  end
+
+  # FIXME: remove
+  #############################
 
   ### 翻译管理页面
   def translate
@@ -80,61 +138,5 @@ class ArticlesController < ApplicationController
     @articles = Article.in(state: [:new, :translating, :translated])
 
     respond_with @articles
-  end
-
-  def proofread
-    # TODO: stub
-  end
-
-  def proofread_index
-    # TODO: stub
-  end
-
-  def publish
-    # TODO: stub
-  end
-
-  def publish_index
-    # TODO: stub
-  end
-
-  ### 翻译进度页面
-  def show
-    authorize! :show, Article
-    return not_exist unless @article = Article.by_id(params[:id])
-    authorize! :show, @article
-    respond_with @article
-  end
-
-  ###
-
-  def create
-    # 检查用户是否可以(创建|建议)原文
-    state_action = params[:article] && params[:article][:state]
-    authorize! state_action.to_sym, Article if ['suggest', 'new'].include? state_action
-
-    # 尝试创建
-    @article = Article.new(params[:article])
-    @article.user = current_user
-    if @article.save
-      flash[:success] = "新#{state_action == 'suggest' && '推荐' || '原文'}已创建。"
-    end
-
-    respond_with @article
-  end
-
-  def update
-    # TODO: stub
-  end
-
-  def destroy
-    # TODO: stub
-  end
-
-  private
-
-  def not_exist
-    flash[:danger] = '无法执行该操作：文章不存在！'
-    redirect_to root_path
   end
 end

@@ -9,32 +9,30 @@ class Article
   #    当然，source_url 和 suggestion 有一个不为空就够了。
   # TODO: 将这段注释移动到 validator 部分
 
-  field :title,                                   type: String # 原文标题（英文）
-  field :source,                                  type: String # 文章来源
-  field :source_url,                              type: String # 文章来源 URL
-  field :license,                                 type: String # 许可信息（如: 无限制，CC BY-NC-SA 3.0，已经过作者授权，……）
-  field :suggestion,                              type: String # 推荐稿（英文，任何格式）
-  field :original,                                type: String # 原文（英文，MarkDown 格式）
-  field :translation,                             type: String # 译文（中文，MarkDown 格式）
-  field :publish,                                 type: String # 终稿（中文，MarkDown 格式）
-  field :state,                                   type: Symbol # 文章状态
+  field :title,       type: String # 原文标题（英文）
+  field :source,      type: String # 文章来源
+  field :source_url,  type: String # 文章来源 URL
+  field :license,     type: String # 许可信息（如: 无限制，CC BY-NC-SA 3.0，已经过作者授权，……）
+  field :suggestion,  type: String # 推荐稿（英文，任何格式）
+  field :original,    type: String # 原文（英文，MarkDown 格式）
+  field :translation, type: String # 译文（中文，MarkDown 格式）
+  field :publish,     type: String # 终稿（中文，MarkDown 格式）
+  field :state,       type: Symbol # 文章状态
 
   belongs_to :category # 文章分类（默认无分类）
   belongs_to :user     # 所属用户
 
   validates_presence_of :title, message: '原文标题不能为空'
 
-  def self.by_id id
-    Article.where(id: id).first
-  end
-
   # 操作
 
-  def begin_translate user
-    return if self.state != :new
+  def claim user
+    return false if self.state != :new
+
     self.user = user
     self.state = :translating
-    self.save!
+
+    self.save
   end
 
   def cancel_translate

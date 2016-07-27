@@ -9,7 +9,7 @@ class User
 
   has_many :articles # 用户翻译的文章 FIXME: Override 默认方法，提供归档和版本检索
 
-  attr_accessible :role_ids, :as => :admin
+  attr_accessible :role_ids, as: :admin
   attr_accessible :uid, :name
   validates_presence_of :name
 
@@ -17,8 +17,8 @@ class User
     Article.where(user: self, state: :translating).first
   end
 
-  def is_translating?
-    not claimed_article.nil?
+  def claimed_article?
+    !!claimed_article
   end
 
   def to_s
