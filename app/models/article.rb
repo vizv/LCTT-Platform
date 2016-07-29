@@ -5,7 +5,10 @@ class Article
   include Mongoid::Timestamps
 
   # 文章所允许的状态
-  VALID_STATES = %i(suggest new translating translated done)
+  @valid_states = %i(suggest new translating translated done)
+  class << Article
+    attr_accessor :valid_states
+  end
 
   # Q: 为什么需要 suggestion？
   # A: 推荐可能摘录自一本书籍之类的，这种情况没有 source_url。
@@ -74,7 +77,7 @@ class Article
   end
 
   # 元编程添加状态检测
-  VALID_STATES.each do |state|
+  valid_states.each do |state|
     define_method "is_#{state}?" do
       self.state == state
     end

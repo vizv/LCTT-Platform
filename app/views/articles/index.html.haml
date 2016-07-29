@@ -32,6 +32,6 @@
             %strong 从未
           - else
             = format article.updated_at
-        %td= article.original.length # FIXME: 添加 before_save 钩子用以缓存
+        %td= article.original && article.original.length || '<strong>空</strong>'.html_safe # FIXME: 添加 before_save 钩子用以缓存
         %td
           = link_to '查看', article_path(article), class: "btn btn-xs btn-block btn-default #{'disabled' unless article.is_new?}"

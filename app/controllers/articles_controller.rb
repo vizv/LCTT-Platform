@@ -5,6 +5,9 @@ class ArticlesController < ApplicationController
     authorize! :index, Article
 
     @articles = Article.all
+
+    state = params[:state].to_sym
+    @articles = @articles.where state: state if Article.valid_states.include? state
   end
 
   def new
