@@ -49,7 +49,6 @@ class ArticlesController < ApplicationController
 
   def update
     # 检查 action 然后调用
-    binding.pry
     action = request.query_parameters[:action]
     actions = %(approve, claim, submit, cancel, accept, deny, archive, restore)
     render status: :not_found and return unless actions.include? action
@@ -63,7 +62,7 @@ class ArticlesController < ApplicationController
   def claim
     authorize! :claim, @article
 
-    if @articles.claim current_user
+    if @article.claim current_user
       flash[:success] = "#{@article} 领取成功。"
     else
       flash[:warning] = "#{@article} 被他人领取。"
