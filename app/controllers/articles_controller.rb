@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
   def new
     @article = Article.new params[:article]
 
-    authorize! :new, @articles
+    authorize! :new, @article
 
     respond_with @article
   end
@@ -35,7 +35,7 @@ class ArticlesController < ApplicationController
 
     authorize! :edit, @article
 
-    respond_with @articles
+    respond_with @article
   end
 
   def show
@@ -44,7 +44,7 @@ class ArticlesController < ApplicationController
 
     authorize! :show, @article
 
-    respond_with @articles
+    respond_with @article
   end
 
   def update
