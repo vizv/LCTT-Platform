@@ -35,6 +35,16 @@ class Article
     self.save
   end
 
+  def submit user, translation
+    return false if self.state != :translating
+
+    self.user = user
+    self.state = :translated
+    self.translation = translation
+
+    self.save
+  end
+
   def cancel_translate
     return if self.state != :translating
     self.user = new_owner
@@ -76,7 +86,7 @@ class Article
     when :suggest     then '新推荐'
     when :new         then '新原文'
     when :translating then '翻译中'
-    when :translted   then '已翻译'
+    when :translated  then '已翻译'
     when :done        then '已校对'
     end
   end

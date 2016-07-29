@@ -20,9 +20,10 @@
 
 .row
   .col-md-12
-    = simple_form_for @article do |f|
+    = simple_form_for @article, url: article_path(@article, action: :submit) do |f|
       = f.input :translation, as: :text, label: '译文'
       = f.hidden_field :state, value: 'translated' # 标记为已翻译
+      = f.button :submit, '提交选题', class: 'btn btn-success'
 
-= link_to '提交翻译', article_path(@article), method: :put, class: "btn btn-success"
-= link_to '放弃翻译', translate_article_path(@article), method: :delete, class: "btn btn-danger", data: { confirm: '真的要放弃么？' }
+/ = link_to '提交翻译', , method: :put, class: "btn btn-success"
+= link_to '放弃翻译', article_path(@article, action: :cancel), method: :put, class: "btn btn-danger", data: { confirm: '真的要放弃么？' }

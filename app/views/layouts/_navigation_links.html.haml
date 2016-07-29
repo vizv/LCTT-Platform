@@ -6,7 +6,7 @@
   %li= link_to '添加', new_article_path                   if can? :new, Article, state: :new
   %li= link_to '认领', articles_path(state: :new)         if can? :claim, Article
   %li= link_to '翻译', edit_article_path(claimed_article) if can? :edit, claimed_article
-  %li= link_to '校对', articles_path(state: :translted)   if can? :proofread, Article
+  %li= link_to '校对', articles_path(state: :translated)   if can? :proofread, Article
   %li= link_to '发布', articles_path(state: :done)        if can? :publish, Article
   %li= link_to '管理', management_path                    if can? :manage, :all
 
