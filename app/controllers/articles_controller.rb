@@ -5,16 +5,12 @@ class ArticlesController < ApplicationController
     authorize! :index, Article
 
     @articles = Article.all
-
-    respond_with @articles
   end
 
   def new
     @article = Article.new params[:article]
 
     authorize! :new, @article
-
-    respond_with @article
   end
 
   def create
@@ -26,16 +22,12 @@ class ArticlesController < ApplicationController
     if @article.save
       flash[:success] = "#{@article.state_label}已创建。"
     end
-
-    respond_with @article
   end
 
   def edit
     @article = Article.find params[:id]
 
     authorize! :edit, @article
-
-    respond_with @article
   end
 
   def show
@@ -43,8 +35,6 @@ class ArticlesController < ApplicationController
     @article = Article.find params[:id] rescue Article.deleted.find params[:id]
 
     authorize! :show, @article
-
-    respond_with @article
   end
 
   def update
@@ -67,8 +57,6 @@ class ArticlesController < ApplicationController
     else
       flash[:warning] = "#{@article} 被他人领取。"
     end
-
-    respond_with @article
   end
 
   def submit
@@ -79,8 +67,6 @@ class ArticlesController < ApplicationController
     else
       flash[:warning] = "#{@article} 已经提交。"
     end
-
-    respond_with @article
   end
 
   def cancel
