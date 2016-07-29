@@ -18,10 +18,10 @@ class ArticlesController < ApplicationController
 
     authorize! :create, @article
 
-    @article.user = current_user
-    if @article.save
-      flash[:success] = "#{@article.state_label}已创建。"
-    end
+    @article.create! current_user rescue respond_with @article and return
+    flash[:success] = "#{@article.state_label}已创建。"
+
+    respond_with @article
   end
 
   def edit
@@ -52,21 +52,15 @@ class ArticlesController < ApplicationController
   def claim
     authorize! :claim, @article
 
-    if @article.claim current_user
-      flash[:success] = "#{@article} 领取成功。"
-    else
-      flash[:warning] = "#{@article} 被他人领取。"
-    end
+    @article.claim! current_user
+    flash[:success] = "#{@article} 领取成功。"
   end
 
   def submit
     authorize! :submit, @article
 
-    if @article.submit current_user, params[:article] and params[:article][:translation]
-      flash[:success] = "#{@article} 的译文已经成功提交。"
-    else
-      flash[:warning] = "#{@article} 已经提交。"
-    end
+    @article.submit! current_user, params[:article] and params[:article][:translation]
+    flash[:success] = "#{@article} 的译文已经成功提交。"
   end
 
   def cancel

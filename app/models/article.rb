@@ -4,6 +4,9 @@ class Article
   include Mongoid::Paranoia
   include Mongoid::Timestamps
 
+  # 文章所允许的状态
+  VALID_STATES = %i(suggest new translating translated done)
+
   # Q: 为什么需要 suggestion？
   # A: 推荐可能摘录自一本书籍之类的，这种情况没有 source_url。
   #    当然，source_url 和 suggestion 有一个不为空就够了。
@@ -26,13 +29,17 @@ class Article
 
   # 操作
 
+  def create user
+    return false if self.persisted?
+
+    self.user = user
+  end
+
   def claim user
     return false if self.state != :new
 
     self.user = user
     self.state = :translating
-
-    self.save
   end
 
   def submit user, translation
@@ -41,9 +48,17 @@ class Article
     self.user = user
     self.state = :translated
     self.translation = translation
-
-    self.save
   end
+
+  # 元编程添加直接保存的方法
+  %w(create claim submit).each do |action|
+    define_method "#{action}!" do |*args|
+      send action, *args
+      self.save!
+    end
+  end
+
+  # FIXME: remove below
 
   def cancel_translate
     return if self.state != :translating
@@ -58,16 +73,11 @@ class Article
     !!deleted_at
   end
 
-  def is_suggest?
-    self.state == :suggest
-  end
-
-  def is_new?
-    self.state == :new
-  end
-
-  def is_translating?
-    self.state == :translating
+  # 元编程添加状态检测
+  VALID_STATES.each do |state|
+    define_method "is_#{state}?" do
+      self.state == state
+    end
   end
 
   # 取值
