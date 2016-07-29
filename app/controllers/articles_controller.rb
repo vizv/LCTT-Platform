@@ -6,7 +6,7 @@ class ArticlesController < ApplicationController
 
     @articles = Article.all
 
-    state = params[:state].to_sym
+    state = params[:state] and params[:state].to_sym
     @articles = @articles.where state: state if Article.valid_states.include? state
   end
 
@@ -22,7 +22,7 @@ class ArticlesController < ApplicationController
     authorize! :create, @article
 
     @article.create! current_user rescue respond_with @article and return
-    flash[:success] = "#{@article.state_label}已创建。"
+    flash[:success] = "#{@article.state_label}「#{@article.title}」已创建。"
 
     respond_with @article
   end
@@ -52,22 +52,35 @@ class ArticlesController < ApplicationController
 
   private
 
+  def approve
+    # TODO stub
+  end
+
   def claim
     authorize! :claim, @article
 
     @article.claim! current_user
-    flash[:success] = "#{@article} 领取成功。"
+    flash[:success] = "「#{@article.title}」领取成功。"
+
+    respond_with @article
   end
 
   def submit
     authorize! :submit, @article
 
     @article.submit! current_user, params[:article] and params[:article][:translation]
-    flash[:success] = "#{@article} 的译文已经成功提交。"
+    flash[:success] = "「#{@article.title}」的译文已成功提交。"
+
+    respond_with @article
   end
 
   def cancel
-    # TODO stub
+    authorize! :cancel, @article
+
+    @article.cancel!
+    flash[:success] = "你已放弃「#{@article.title}」的翻译。"
+
+    respond_with @article
   end
 
   def accept

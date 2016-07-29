@@ -53,8 +53,16 @@ class Article
     self.translation = translation
   end
 
+  def cancel
+    return false if self.state != :translating
+
+    self.user = new_owner
+    self.state = :new
+    self.translation = nil
+  end
+
   # 元编程添加直接保存的方法
-  %w(create claim submit).each do |action|
+  %w(create claim submit cancel).each do |action|
     define_method "#{action}!" do |*args|
       send action, *args
       self.save!
@@ -86,8 +94,8 @@ class Article
   # 取值
 
   def all_versions
-    a = self.versions
-    a.push self.dup
+    a = self.versions.to_a
+    a.push self
   end
 
   def new_owner
