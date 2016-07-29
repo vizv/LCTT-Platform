@@ -84,11 +84,21 @@ class ArticlesController < ApplicationController
   end
 
   def accept
-    # TODO stub
+    authorize! :accept, @article
+
+    @article.accept! current_user, params[:article] and params[:article][:publish]
+    flash[:success] = "你已完成对「#{@article.title}」的校对。"
+
+    respond_with @article
   end
 
   def deny
-    # TODO stub
+    authorize! :deny, @article
+
+    @article.deny!
+    flash[:success] = "你已否决「#{@article.title}」的翻译。"
+
+    respond_with @article
   end
 
   def archive

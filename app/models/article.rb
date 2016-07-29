@@ -61,8 +61,24 @@ class Article
     self.translation = nil
   end
 
+  def accept user, publish
+    return false if self.state != :translated
+
+    self.user = user
+    self.state = :done
+    self.publish = publish
+  end
+
+  def deny
+    return false if self.state != :translated
+
+    self.user = new_owner
+    self.state = :new
+    self.translation = nil
+  end
+
   # 元编程添加直接保存的方法
-  %w(create claim submit cancel).each do |action|
+  %w(create claim submit cancel accept deny).each do |action|
     define_method "#{action}!" do |*args|
       send action, *args
       self.save!
