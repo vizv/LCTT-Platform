@@ -82,6 +82,9 @@ class Article
   end
 
   def to_s
-    archived? && "[#{state}-归档] #{title}" || "[#{state}] #{title}"
+    state = state_label
+    state = "#{state}-归档" if archived?
+    state = "[#{state}]"
+    "#{state} #{title}"
   end
 end
