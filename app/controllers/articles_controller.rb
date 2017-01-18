@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  respond_to :html
+  # respond_to :html FIXME: deprecated
 
   def index
     authorize! :index, Article

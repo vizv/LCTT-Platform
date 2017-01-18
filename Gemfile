@@ -1,46 +1,49 @@
 source 'https://rubygems.org'
-ruby '2.1.2'
-gem 'rails', '3.2.18'
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier',     '>= 1.0.3'
-end
+ruby '2.3.3'
+gem 'rails', '4.2.7.1'
+
+# for assets
+gem 'haml-rails'
+gem 'tilt' # required by stylus with rails
+gem 'coffee-rails'
+gem 'uglifier'
+gem 'sass-rails'
+
+# for UI
+gem 'bootstrap-sass' # FIXME: replace with Angular Material.
+gem 'simple_form' # FIXME: remove later.
+gem 'font-awesome-sass'
+gem 'github-markdown' # FIXME: replace with redcarpet.
+
+# for database
+gem 'mongoid'
+
+# for access control
+gem 'cancan'
+gem 'rolify'
+
+# for GitHub OAuth
+gem 'omniauth'
+gem 'omniauth-github'
+
+# for development
 group :development do
-  gem 'html2haml'
-  gem 'quiet_assets'
-  gem 'rails_layout'
-end
-group :development, :test do
-  gem 'factory_girl_rails'
+  # debug-related
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'pry-byebug'
-  gem 'rspec-rails'
+
+  # web server
+  gem 'thin'
+  gem 'quiet_assets'
 end
+
+# for production
 group :production do
+  # web server
   gem 'unicorn'
 end
-group :test do
-  gem 'database_cleaner', '1.0.1'
-  gem 'email_spec'
-  gem 'mongoid-rspec'
-end
 
-gem 'jquery-rails'
-gem 'bootstrap-sass'
-gem 'cancan'
-gem 'figaro'
-gem 'haml-rails'
-gem 'mongoid'
-gem 'omniauth'
-gem 'omniauth-github'
-gem 'rolify'
-gem 'simple_form'
-gem 'therubyracer', :platform=>:ruby
-gem 'font-awesome-sass'
-gem 'github-markdown'
-gem 'rouge'
-
-# sass fix
-gem 'sass', '3.2.13'
+# misc
+gem 'therubyracer', :platform=>:ruby # V8 Javascript Interpreter
+gem 'figaro' # environment configuration with YAML

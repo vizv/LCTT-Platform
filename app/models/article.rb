@@ -1,7 +1,7 @@
 class Article
   include Mongoid::Document
-  include Mongoid::Versioning
-  include Mongoid::Paranoia
+  # include Mongoid::Versioning FIXME: deprecated
+  # include Mongoid::Paranoia   FIXME: deprecated
   include Mongoid::Timestamps
 
   # 文章所允许的状态

@@ -1,6 +1,6 @@
 class User
   include Mongoid::Document
-  include Mongoid::Paranoia
+  # include Mongoid::Paranoia FIXME: deprecated
   include Mongoid::Timestamps::Created
   rolify
 
@@ -9,8 +9,8 @@ class User
 
   has_many :articles # 用户翻译的文章 FIXME: Override 默认方法，提供归档和版本检索
 
-  attr_accessible :role_ids, as: :admin
-  attr_accessible :uid, :name
+  # attr_accessible :role_ids, as: :admin FIXME: ????
+  # attr_accessible :uid, :name           FIXME: ????
   validates_presence_of :name
 
   def claimed_article
